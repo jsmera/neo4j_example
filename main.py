@@ -52,11 +52,20 @@ class Connection:
       session.close()
       return ans
 
+  def get_last_answered_users_by_user(self, id_user):
+    query = "with date() - duration({years: 1}) AS delta\n"    
+    query += "match (a: User)-[:ANSWER]-(r:Post)\n"
+    query += "where id(a) = {} and r.date >= delta\n".format(id_user)
+    query += "match (user: User)-[:QUESTION]-()-[:ANSWER_TO]-(r: Post)\n"
+    query += "return collect(user)\n"
+    with self.driver.session() as session:
+      ans = session.run(
+        query).single()
+      session.close()
+      return ans
+
 cc = Connection()
 id_test = cc.create_user("hola", "test@gmail.com", "123123", "Estudiante")
 id_post = cc.make_a_question(id_test, "IT", "What can I do for carlos loveme?", "24/06/12")
 id_answer = cc.make_a_answer(id_test, id_post, "The answer is", "24/06/12")
 cc.make_vote(-1,id_test,id_answer, True, "good")
-
-
-
