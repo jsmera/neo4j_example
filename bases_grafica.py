@@ -19,16 +19,18 @@ def Ingresar():
 		#checkear con estas dos cosas en la base de datos		
 		return (name,contraseña)
 
-def preguntas():
+def preguntas(id_user):
 		if login == True:
-				print("Realizar una pregunta")
-				print("--------------------------")
-				print("Ingrese topic")
-				topic=input()
-				print("Ingrese la pregunta")
-				question = input()
-				fecha=datetime.now()
-				return (topic,question,fecha)
+			print("Realizar una pregunta")
+			print("--------------------------")
+			print("Ingrese topic")
+			topic=input()
+			print("Ingrese la pregunta")
+			question = input()
+			fecha=datetime.now()
+			return (id_user,topic,question,fecha)
+		else:
+			print("por favor log in")
 
 def menu_secundario():
     print("Bienvenido a las preguntas")
