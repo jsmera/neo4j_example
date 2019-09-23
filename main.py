@@ -27,16 +27,16 @@ class Connection:
       session.close()
       return ans
 
-  def make_a_answer(self, id_user, id_question, topic, answer, date):
+  def make_a_answer(self, id_user, id_question, answer, date):
     query = "MATCH (a: User), (w: Post)\n"
     query += "WHERE id(a) = {} and id(w) = {}\n".format(id_user,id_question)
-    query += "CREATE (p: Post {type: 'A', topic: $topic, answer: $answer, date: $date})\n"
+    query += "CREATE (p: Post {type: 'A', answer: $answer, date: $date})\n"
     query += "CREATE (a)-[r: ANSWER]->(p)\n"
     query += "CREATE (w)-[:ANSWER_TO]->(p)\n"
     query += "RETURN id(p)"
     with self.driver.session() as session:
       ans = session.run(
-        query, topic=topic, answer=answer, date=date).single().value()
+        query,answer=answer, date=date).single().value()
       session.close()
       return ans
 
@@ -55,7 +55,7 @@ class Connection:
 cc = Connection()
 id_test = cc.create_user("hola", "test@gmail.com", "123123", "Estudiante")
 id_post = cc.make_a_question(id_test, "IT", "What can I do for carlos loveme?", "24/06/12")
-id_answer = cc.make_a_answer(id_test, id_post,"IT2", "The answer is", "24/06/12")
+id_answer = cc.make_a_answer(id_test, id_post, "The answer is", "24/06/12")
 cc.make_vote(-1,id_test,id_answer, True, "good")
 
 
