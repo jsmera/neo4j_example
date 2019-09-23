@@ -16,21 +16,39 @@ def Ingresar():
 		print("Ingrese contraseña")
 		contraseña = input()
 		print("--------------------------")
-		#checkear con estas dos cosas en la base de datos		
+		#checkear con estas dos cosas en la base de datos si esta login		
 		return (name,contraseña)
 
 def preguntas(id_user):
-		if login == True:
-			print("Realizar una pregunta")
-			print("--------------------------")
-			print("Ingrese topic")
-			topic=input()
-			print("Ingrese la pregunta")
-			question = input()
-			fecha=datetime.now()
-			return (id_user,topic,question,fecha)
-		else:
-			print("por favor log in")
+	print("Realizar una pregunta")
+	print("--------------------------")
+	print("Ingrese topic")
+	topic=input()
+	print("Ingrese la pregunta")
+	question = input()
+	fecha=datetime.now()
+	return (id_user,topic,question,fecha)
+
+def respuestas(id_user, id_question):
+	print("Responder")
+	print("--------------------------")
+	print("Ingrese su respuesta")
+	answer=input()
+	fecha=datetime.now()
+	return (id_user,id_question,answer,fecha)
+	
+
+def votar(id_user,id_ans):
+	print("Calificar")
+	print("--------------------------")
+	print("Ingrese -1 para calificar afirmativamente o 1 positivamente")
+	calificacion=input()
+	print("Ingrese 1 si desea sensurar o 0 si no")
+	censure=input()
+	print("escriba (buena) o (pobre) segun como la desee calificar")
+	calificacion=input()
+	return (id_user,id_ans,censure, calificacion)
+		
 
 def menu_secundario():
     print("Bienvenido a las preguntas")
