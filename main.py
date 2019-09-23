@@ -55,8 +55,8 @@ class Connection:
 cc = Connection()
 id_test = cc.create_user("hola", "test@gmail.com", "123123", "Estudiante")
 id_post = cc.make_a_question(id_test, "IT", "What can I do for carlos loveme?", "24/06/12")
-cc.make_vote(-1,id_test,id_post)
 id_answer = cc.make_a_answer(id_test, id_post,"IT2", "The answer is", datetime.today())
+cc.make_vote(-1,id_test,id_answer)
 
 
 
