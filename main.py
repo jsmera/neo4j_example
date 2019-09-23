@@ -40,23 +40,24 @@ class Connection:
       session.close()
       return ans
 
-  def make_vote(self,voteKind,id_user,id_post):
+  def make_vote(self,voteKind,id_user,id_ans,censure,classifi):
     query = "MATCH (a: User)\n"
     query += "WHERE id(a) = {}\n".format(id_user)
     query += "MATCH (p:Post)\n"
-    query += "WHERE id(p)= {}\n".format(id_post)
-    query += "CREATE (a)-[:VOTE2 {type:[$voteKind]}]->(p)\n"
+    query += "WHERE id(p)= {}\n".format(id_ans)
+    query += "CREATE (a)-[:VOTE3 {type:$voteKind,censure:$censure, classifi:$classifi}]->(p)\n"
     with self.driver.session() as session:
       ans = session.run(
-        query, voteKind=voteKind).single()
+        query, voteKind=voteKind,censure=censure, classifi=classifi).single()
       session.close()
       return ans
 
 cc = Connection()
 id_test = cc.create_user("hola", "test@gmail.com", "123123", "Estudiante")
 id_post = cc.make_a_question(id_test, "IT", "What can I do for carlos loveme?", "24/06/12")
-cc.make_vote(-1,id_test,id_post)
-id_answer = cc.make_a_answer(id_test, id_post,"IT2", "The answer is", datetime.today())
+
+id_answer = cc.make_a_answer(id_test, id_post,"IT2", "The answer is", "24/06/12")
+cc.make_vote(-1,id_test,id_answer, True, "good")
 
 
 
