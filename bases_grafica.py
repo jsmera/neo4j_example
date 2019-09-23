@@ -1,5 +1,4 @@
 from sys import stdin
-<<<<<<< HEAD
 import os
 clear = lambda: os.system('cls')
 def menu_Votar2(id_user,id_ans):
@@ -23,9 +22,6 @@ def menu_Votar2(id_user,id_ans):
     print()
     print("Voto realizado")
     menu_Preguntas(id_user)
-=======
-from datetime import datetime
->>>>>>> 479ed0d7e966cb5c2816b5bae7bac54d519ea190
 
 def menu_Votar(id_user):
     clear()
@@ -65,7 +61,6 @@ def menu_Responder(id_user,id_question):
     print("Respuesta posteada")
     menu_Opciones(id_user,id_question)
 
-<<<<<<< HEAD
     
 def menu_Opciones(id_user,id_question):
     clear()
@@ -128,59 +123,12 @@ def menu_Generar(id_user):
 def menu_Preguntas(name):
     clear()
     id_user=name
-=======
-def Ingresar():
-		print("Ingresar a la seccion")
-		print("--------------------------")
-		print("Ingrese nombre de usuario")
-		name=input()
-		print("--------------------------")
-		print("Ingrese contraseña")
-		contraseña = input()
-		print("--------------------------")
-		#checkear con estas dos cosas en la base de datos si esta login		
-		return (name,contraseña)
-
-def preguntas(id_user):
-	print("Realizar una pregunta")
-	print("--------------------------")
-	print("Ingrese topic")
-	topic=input()
-	print("Ingrese la pregunta")
-	question = input()
-	fecha=datetime.now()
-	return (id_user,topic,question,fecha)
-
-def respuestas(id_user, id_question):
-	print("Responder")
-	print("--------------------------")
-	print("Ingrese su respuesta")
-	answer=input()
-	fecha=datetime.now()
-	return (id_user,id_question,answer,fecha)
-	
-
-def votar(id_user,id_ans):
-	print("Calificar")
-	print("--------------------------")
-	print("Ingrese -1 para calificar afirmativamente o 1 positivamente")
-	calificacion=input()
-	print("Ingrese 1 si desea sensurar o 0 si no")
-	censure=input()
-	print("escriba (buena) o (pobre) segun como la desee calificar")
-	calificacion=input()
-	return (id_user,id_ans,censure, calificacion)
-		
-
-def menu_secundario():
->>>>>>> 479ed0d7e966cb5c2816b5bae7bac54d519ea190
     print("Bienvenido a las preguntas")
     print("==============================")
     print()
     print("Seleccione una opcion")
     print("1. Visualizar preguntas")
     print("2. Generar pregunta")
-<<<<<<< HEAD
     print("3. Salir")
     print()
     num=int(stdin.readline().strip())
@@ -235,9 +183,6 @@ def menu_Registrarse():
     print("Usted ha sido registrado exitosamente")
     menu_Principal()
     
-=======
-    print()
->>>>>>> 479ed0d7e966cb5c2816b5bae7bac54d519ea190
 
 def menu_Principal():
     clear()
