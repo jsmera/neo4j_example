@@ -64,6 +64,11 @@ class Connection:
       session.close()
       return ans
 
+def search(self, id_user):
+	query = "MATCH(usuario: User)-[:QUESTION]->(preguntas) where id(usuario)={} RETURN preguntas ORDER BY preguntas.date limit 5".format(id_user)
+	query2 = "MATCH(preguntas)-[:ANSWER_TO]->(respuestas) RETURN respuestas"
+
+
 cc = Connection()
 id_test = cc.create_user("hola", "test@gmail.com", "123123", "Estudiante")
 id_post = cc.make_a_question(id_test, "IT", "What can I do for carlos loveme?", "24/06/12")
