@@ -7,11 +7,40 @@ class Connection:
     self.uri = "bolt://localhost:7687"
     self.driver = GraphDatabase.driver(self.uri, auth=("neo4j", "123123"))
 
-  def create_user(self, username, email, password, role):
-    query = "CREATE (n: User {username: $username, email: $email, password: $password, role: $role}) RETURN id(n)"
+  def list_questions(self):
+    query = "MATCH (p: Post {type: 'Q'})\n"
+    query += "RETURN p\n"
+    query += "ORDER BY p.date LIMIT 5"
+    with self.driver.session() as session:
+      ans = session.run(query).value()
+      session.close()
+    return ans
+
+  def list_answers_to_question(self, id_question):
+    query = "MATCH (p: Post)-[:ANSWER_TO]-(r: Post)\n"
+    query += "WHERE id(p) = {}\n".format(id_question)
+    query += "RETURN r\n"
+    query += "ORDER BY p.date LIMIT 5"
+    with self.driver.session() as session:
+      ans = session.run(query).value()
+      session.close()
+    return ans
+
+  def login(self, username, password):
+    query = "MATCH (a: User {username: $username, password: $password})\n"
+    query += "RETURN id(a)"
+    with self.driver.session() as session:
+      ans = session.run(query, username=username, password=password).single()
+      if ans is not None:
+       ans = ans.value()
+      session.close()
+    return ans
+
+  def create_user(self, name, username, email, password, role):
+    query = "CREATE (n: User {username: $username, name: $name, email: $email, password: $password, role: $role}) RETURN id(n)"
     with self.driver.session() as session:
       ans = session.run(
-        query, username=username, email=email, password=password, role=role).single().value()
+        query, username=username, name=name, email=email, password=password, role=role).single().value()
       session.close()
       return ans
 
@@ -60,7 +89,7 @@ class Connection:
     query += "return collect(user)\n"
     with self.driver.session() as session:
       ans = session.run(
-        query).single()
+        query).value()
       session.close()
       return ans
 
@@ -69,8 +98,8 @@ def search(self, id_user):
 	query2 = "MATCH(preguntas)-[:ANSWER_TO]->(respuestas) RETURN respuestas"
 
 
-cc = Connection()
-id_test = cc.create_user("hola", "test@gmail.com", "123123", "Estudiante")
-id_post = cc.make_a_question(id_test, "IT", "What can I do for carlos loveme?", "24/06/12")
-id_answer = cc.make_a_answer(id_test, id_post, "The answer is", "24/06/12")
-cc.make_vote(-1,id_test,id_answer, True, "good")
+#cc = Connection()
+#id_test = cc.create_user("hola", "test@gmail.com", "123123", "Estudiante")
+#id_post = cc.make_a_question(id_test, "IT", "What can I do for carlos loveme?", "24/06/12")
+#id_answer = cc.make_a_answer(id_test, id_post, "The answer is", "24/06/12")
+#cc.make_vote(-1,id_test,id_answer, True, "good")
