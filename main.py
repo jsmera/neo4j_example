@@ -74,10 +74,10 @@ class Connection:
     query += "WHERE id(a) = {}\n".format(id_user)
     query += "MATCH (p:Post)\n"
     query += "WHERE id(p)= {}\n".format(id_ans)
-    query += "CREATE (a)-[:VOTE3 {type:$voteKind,censure:$censure, classifi:$classifi}]->(p)\n"
+    query += "CREATE (a)-[:VOTE3 {type:$voteKind,censure:$censure, classifi:$classifi, date: $date}]->(p)\n"
     with self.driver.session() as session:
       ans = session.run(
-        query, voteKind=voteKind,censure=censure, classifi=classifi).single()
+        query, voteKind=voteKind,censure=censure, classifi=classifi, date=datetime.now()).single()
       session.close()
       return ans
 
@@ -86,16 +86,49 @@ class Connection:
     query += "match (a: User)-[:ANSWER]-(r:Post)\n"
     query += "where id(a) = {} and r.date >= delta\n".format(id_user)
     query += "match (user: User)-[:QUESTION]-()-[:ANSWER_TO]-(r: Post)\n"
-    query += "return collect(user)\n"
+    query += "return user\n"
     with self.driver.session() as session:
       ans = session.run(
         query).value()
       session.close()
       return ans
 
-def search(self, id_user):
-	query = "MATCH(usuario: User)-[:QUESTION]->(preguntas) where id(usuario)={} RETURN preguntas ORDER BY preguntas.date limit 5".format(id_user)
-	query2 = "MATCH(preguntas)-[:ANSWER_TO]->(respuestas) RETURN respuestas"
+  def search(self, id_user):
+    query = "MATCH(usuario: User)-[:QUESTION]->(preguntas)\n"
+    query += "WHERE id(usuario)={}\n".format(id_user)
+    query += "WITH preguntas\n"
+    query += "ORDER BY preguntas.date limit 5\n"
+    query += "MATCH(preguntas)-[:ANSWER_TO]->(respuestas)\n"
+    query += "RETURN [preguntas, respuestas]"
+    with self.driver.session() as session:
+      ans = session.run(
+        query).value()
+      session.close()
+      return ans
+
+  def tree(self, id_user):
+    tree = []
+    first = self.get_last_answered_users_by_user(id_user)
+    tree.append(first)
+    
+    second = []
+    for user in first:
+      second.extend(self.get_last_answered_users_by_user(user.id))
+    tree.append(second)
+
+    thrid = []
+    for user in second:
+      thrid.extend(self.get_last_answered_users_by_user(user.id))
+    tree.append(thrid)
+
+
+    four = []
+    for user in thrid:
+      four.extend(self.get_last_answered_users_by_user(user.id))
+    tree.append(four)
+
+    return tree
+
 
 
 #cc = Connection()
